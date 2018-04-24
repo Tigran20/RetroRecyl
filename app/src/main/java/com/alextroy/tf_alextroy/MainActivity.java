@@ -9,9 +9,8 @@ import android.widget.Toast;
 import com.alextroy.tf_alextroy.adapter.CurrencyAdapter;
 import com.alextroy.tf_alextroy.api.App;
 import com.alextroy.tf_alextroy.model.Currency;
-import com.alextroy.tf_alextroy.model.JSONResponse;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyTag";
 
     private RecyclerView recyclerView;
-    private ArrayList<Currency> list;
     private CurrencyAdapter adapter;
 
     @Override
@@ -31,28 +29,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.currency_list);
 
-        list = new ArrayList<>();
-
         recyclerView = findViewById(R.id.recycler_view);
-        adapter = new CurrencyAdapter(MainActivity.this, list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new CurrencyAdapter(this);
         recyclerView.setAdapter(adapter);
 
         getCurrency();
     }
 
     public void getCurrency() {
-        App.getApi().loadCurrency(KEY).enqueue(new Callback<JSONResponse>() {
+        App.getApi().loadCurrency(KEY).enqueue(new Callback<Currency>() {
             @Override
-            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
-                list.addAll(response.body().getCurrencies());
-                adapter.updateData(list);
+            public void onResponse(Call<Currency> call, Response<Currency> response) {
+                List<Currency.Items> list = response.body().getList();
+                adapter.setDataChanged(list);
 
                 Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<JSONResponse> call, Throwable t) {
+            public void onFailure(Call<Currency> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
             }
         });

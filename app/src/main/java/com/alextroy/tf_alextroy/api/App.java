@@ -14,15 +14,15 @@ public class App extends Application {
 
     private static Api api;
     private Retrofit retrofit;
+    private GsonBuilder gsonBuilder;
+    private Gson gson;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        GsonBuilder gsonBuilder = new GsonBuilder();
-//        JsonDeserializer<Currency> deserializer = new CurrencyDeserializer();
-//        gsonBuilder.registerTypeAdapter(Currency.class, deserializer);
-        Gson gson = gsonBuilder.create();
+        gsonBuilder = new GsonBuilder();
+        gson = gsonBuilder.create();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

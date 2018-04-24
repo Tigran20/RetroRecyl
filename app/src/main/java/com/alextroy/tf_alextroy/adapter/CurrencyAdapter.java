@@ -15,12 +15,12 @@ import java.util.List;
 
 public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHolder> {
 
+    private List<Currency.Items> currencies;
     private Context context;
-    private ArrayList<Currency> currencies;
 
-    public CurrencyAdapter(Context context, ArrayList<Currency> currencies) {
+    public CurrencyAdapter(Context context) {
         this.context = context;
-        this.currencies = currencies;
+        this.currencies = new ArrayList<>();
     }
 
     @Override
@@ -52,9 +52,8 @@ public class CurrencyAdapter extends RecyclerView.Adapter<CurrencyAdapter.ViewHo
         }
     }
 
-    public void updateData(ArrayList<Currency> curr){
-        currencies.clear();
-        currencies.addAll(curr);
+    public void setDataChanged(List<Currency.Items> items){
+        this.currencies = items;
         notifyDataSetChanged();
     }
 }
